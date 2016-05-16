@@ -8,6 +8,8 @@
   },
   "dependencies": {
       "express": "4.13.4",
-      "socket.io": "1.4.5"
+      "socket.io": "1.4.5",
+      "johnny-five": "0.9.49",
+      "edison-io": "0.9.4"
   }
 }

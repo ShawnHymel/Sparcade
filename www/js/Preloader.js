@@ -27,6 +27,11 @@ Vortex.Preloader.prototype = {
         this.load.image('butterfly', 'img/butterfly.png');
         this.load.image('enemy_bullet', 'img/enemy_bullet.png');
         
+        // Load high score sprites
+        this.load.image('button_arrow', 'img/button_arrow.png');
+        this.load.image('button_ok', 'img/button_ok.png');
+        this.load.image('button_cancel', 'img/button_cancel.png');
+        
         // Load audio
         game.load.audio('music', ['sound/floating_cities.ogg', 
             'sound/floating_cities.m4a']);
