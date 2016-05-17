@@ -96,8 +96,6 @@ board.on('ready', function() {
         }
         
         // Show text on LCD
-        console.log(text_1);
-        console.log(text_2);
         lcd.print(text_1);
         lcd.cursor(1, 0);
         lcd.print(text_2);
@@ -112,7 +110,9 @@ board.on('ready', function() {
 
 // Request logging
 app.use(function(req, res, next) {
-    console.log(req.url);
+    if (req.url === '/') {
+        console.log("Serving game");
+    }
     next();
 });
 
@@ -132,22 +132,35 @@ io.on('connection', function(socket) {
     // If we get initials back, store them with the high scores
     socket.on('initialsScore', function(msg) {
         console.log(msg.initials + ": " + msg.score);
-        for (var i = scoreContent.highscores.length - 1; i >= 0; i--) {
-            if ((msg.score <= scoreContent.highscores[i].score) || (i === 0)) {
-                if (i === scoreContent.highscores.length - 1) {
-                    scoreContent.highscores.push({
+        
+        // Check for top score
+        if (msg.score > scoreContent.highscores[0].score) {
+            scoreContent.highscores.splice(0, 0, {
                         "initials": msg.initials, 
                         "score": msg.score
-                    });
-                } else {
-                    scoreContent.highscores.splice(i, 0, {
-                        "initials": msg.initials, 
-                        "score": msg.score
-                    });
+            });
+            scoreContent.highscores.splice(-1, 1);
+            
+        // Check for other placement in high scores
+        } else {
+            for (var i = scoreContent.highscores.length - 1; i >= 0; i--) {
+                if ((msg.score <= scoreContent.highscores[i].score) || 
+                    (i === 0)) {
+                    if (i === scoreContent.highscores.length - 1) {
+                        scoreContent.highscores.push({
+                            "initials": msg.initials, 
+                            "score": msg.score
+                        });
+                    } else {
+                        scoreContent.highscores.splice(i + 1, 0, {
+                            "initials": msg.initials, 
+                            "score": msg.score
+                        });
+                    }
+                    console.log(scoreContent.highscores);
+                    scoreContent.highscores.splice(-1, 1);
+                    break;
                 }
-                console.log(scoreContent.highscores);
-                scoreContent.highscores.splice(-1, 1);
-                break;
             }
         }
         console.log(scoreContent.highscores);
