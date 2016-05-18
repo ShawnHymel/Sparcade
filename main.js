@@ -56,6 +56,7 @@ board.on('ready', function() {
     // Make sure the LCD is on, has been cleared, and the cursor is set to home
     lcd.on();
     lcd.clear();
+    sleep(2);
     lcd.home();
 
     // Print a splash string
@@ -71,6 +72,7 @@ board.on('ready', function() {
         
         // Reset lcd
         lcd.clear();
+        sleep(2);
         lcd.home();
         
         // Create string to display
@@ -184,3 +186,9 @@ app.use(express.static(__dirname + '/' + sitePath));
 http.listen(port, function() {
     console.log("Server running at: http://localhost:" + port);
 });
+
+// Hack needed to allow LCD to clear. Avoids garbage characters
+var sleep = function(milliSeconds) {
+    var startTime = new Date().getTime();
+    while (new Date().getTime() < startTime + milliSeconds);
+};
